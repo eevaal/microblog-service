@@ -1,0 +1,18 @@
+services:
+  microblog-service:
+    build: .
+    container_name: microblog-service
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  db:
+    image: postgres:17
+    container_name: microblog-db
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
