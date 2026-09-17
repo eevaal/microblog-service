@@ -1,8 +1,8 @@
 from datetime import datetime
-from pydantic import ConfigDict
+from pydantic import BaseModel, ConfigDict
 
 
-class PostBase():
+class PostBase(BaseModel):
     title: str
     content: str
 
