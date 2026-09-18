@@ -8,6 +8,9 @@ services:
       - .env
     depends_on:
       - db
+      - redis
+    networks:
+      - app-network
 
   db:
     image: postgres:17
@@ -16,3 +19,18 @@ services:
       - .env
     ports:
       - "5432:5432"
+    networks:
+      - app-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: microblog-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+
+networks:
+  app-network:
+    driver: bridge

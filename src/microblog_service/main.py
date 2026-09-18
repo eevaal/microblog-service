@@ -4,11 +4,19 @@ from sqlalchemy import engine
 from microblog_service.database.database import engine, Base
 from fastapi import FastAPI
 from src.microblog_service.api.v1.posts import router as posts_router
+from microblog_service.core.config import settings
+
+from redis import asyncio as aioredis
+
 
 from microblog_service.models.post import Post
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    redis_url = settings.REDIS_URL
+    redis = aioredis.from_url(redis_url, decode_responses=True)
+    app.state.redis = redis
+    await redis.close()
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     yield
